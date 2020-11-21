@@ -27,8 +27,11 @@ def schedule(p_id,arrival_time,burst_time):
 
     # print (current_at_index)
     for i in p_id:
+        if current_time < arrival_time[current_at_index]:
+            current_time+=(arrival_time[current_at_index]-current_time)
         completion_time[current_at_index] = current_time + burst_time[current_at_index]
         current_time = completion_time[current_at_index]
+        print ('Processing PID ',current_at_index)
         current_at_index = next_min_index(arrival_time, arrival_time[current_at_index])
 
     # print (completion_time)
