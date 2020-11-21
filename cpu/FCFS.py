@@ -46,8 +46,4 @@ if __name__ == '__main__':
     # p_id = [1, 2, 3, 4, 5]
     # arrival_time = [0, 1, 2, 3, 4]
     # burst_time = [2, 3, 6, 5, 4]
-
-    # p_id = [1, 2, 3, 4, 5,6]
-    # arrival_time = [6, 3, 5, 1, 4,2]
-    # burst_time = [8, 3, 6, 2, 4,2]
     schedule(p_id,arrival_time,burst_time)

@@ -20,10 +20,6 @@ def get_index(pid_q,at_q,bt_q):
 
 
 def schedule(p_id,arrival_time,burst_time,completion_time):
-    # print (p_id)
-    # print (arrival_time)
-    # print (burst_time)
-    
     current_time=0
     
 
@@ -61,11 +57,6 @@ def schedule(p_id,arrival_time,burst_time,completion_time):
         else:
             current_time+=1
 
-        # print (completion_time)
-        # print (p_id)
-        # print (arrival_time)
-        # print (burst_time)
-
 
 def show_details(p_id,arrival_time,burst_time,completion_time):
     print("PID\tAT\tCPU\tCOM\tTAT\tWT")
@@ -82,10 +73,6 @@ if __name__ == '__main__':
     # p_id = [1, 2, 3, 4, 5]
     # arrival_time = [0, 1, 2, 3, 4]
     # burst_time = [7, 5, 6, 2, 4]
-
-    # p_id = [1, 2, 3, 4, 5,6]
-    # arrival_time = [6, 3, 5, 1, 4,2]
-    # burst_time = [8, 3, 6, 2, 4,2]
     completion_time = [0]*(len(p_id)+1)
     schedule(p_id[:],arrival_time[:],burst_time[:],completion_time)
     show_details(p_id,arrival_time,burst_time,completion_time)
