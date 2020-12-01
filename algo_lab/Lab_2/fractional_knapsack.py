@@ -17,13 +17,14 @@ def knapsack(objects, profits, weights):
         if cap_of_knapsack > weights[index]:
             cap_of_knapsack -= weights[index]
             value += profits[index]
-            print(index, '\t  ', cap_of_knapsack, '\t\t ', value)
+            print(objects[index], '\t  ', cap_of_knapsack, '\t\t ', value)
         else:
             value += (ratio[index]*cap_of_knapsack)
-            print(index, '\t  ', cap_of_knapsack, '\t\t ', value)
             cap_of_knapsack = 0
+            print(objects[index], '\t  ', cap_of_knapsack, '\t\t ', value)
         del weights[index]
         del profits[index]
+        del objects[index]
         del ratio[index]
 
     print('\nTotal profit : ', value)
