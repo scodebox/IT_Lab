@@ -1,0 +1,7 @@
+A list of different states of process:
+
+    New Process
+    Running Process
+    Waiting Process
+    Ready Process
+    Terminated Process

@@ -1,0 +1,1 @@
+Kernel is the core and most important part of a computer operating system which provides basic services for all parts of the OS.

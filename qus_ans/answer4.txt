@@ -1,0 +1,1 @@
+A socket is used to make connection between two applications. Endpoints of the connection are called socket.

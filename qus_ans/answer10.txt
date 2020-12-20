@@ -1,0 +1,2 @@
+Micro kernel: micro kernel is the kernel which runs minimal performance affecting services for operating system. In micro kernel operating system all other operations are performed by processor.
+Macro Kernel: Macro Kernel is a combination of micro and monolithic kernel.

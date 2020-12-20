@@ -1,0 +1,1 @@
+A monolithic kernel is a kernel which includes all operating system code is in single executable image.

@@ -1,0 +1,4 @@
+An executing program is known as process. There are two types of processes:
+
+    Operating System Processes
+    User Processes

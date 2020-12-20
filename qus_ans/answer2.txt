@@ -1,0 +1,4 @@
+There are two main purposes of an operating system:
+
+It is designed to make sure that a computer system performs well by managing its computational activities.
+It provides an environment for the development and execution of programs.

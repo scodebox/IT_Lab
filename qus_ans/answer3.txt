@@ -1,0 +1,5 @@
+Batched operating systems
+Distributed operating systems
+Timesharing operating systems
+Multi-programmed operating systems
+Real-time operating systems
