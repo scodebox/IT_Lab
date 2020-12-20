@@ -21,6 +21,7 @@ def merge_files(qus_files, ans_files):
 
         # Reading the question from file.
         question = open(qus_file_name, 'r').read()
+        new_file_name = 'merge'+qus_number+'.txt'
 
         print(" MERGING : ", qus_file_name)
 
@@ -30,7 +31,7 @@ def merge_files(qus_files, ans_files):
             answer = open(ans_file_name, 'r').read()
 
             # Create new file.
-            new_file = open('merge'+qus_number, 'w')
+            new_file = open(new_file_name, 'w')
 
             # Writing into the file.
             new_file.write(str("QUESTION \n"))
@@ -44,7 +45,7 @@ def merge_files(qus_files, ans_files):
         else:
             # When answer file doesn't exist.
             # Create new file.
-            new_file = open('merge'+qus_number, 'w')
+            new_file = open(new_file_name, 'w')
 
             # Writing into the file.
             new_file.write(str("QUESTION \n"))
