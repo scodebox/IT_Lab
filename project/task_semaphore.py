@@ -2,10 +2,14 @@
 import threading
 import random
 import time
+import datetime
+import json
 # import RPi.GPIO as GPIO
 
 semaphore = threading.Semaphore(1)
 total_sensor = 10
+data_dump = {}
+sensor_details = []
 sensor_data = [0]*total_sensor
 control = True
 
@@ -33,8 +37,6 @@ def detect_object(id):
         trigger = pin_details[id][0]
         echo = pin_details[id][1]
 
-        
-
         # GPIO.setup(trigger, GPIO.OUT)
         # GPIO.setup(echo, GPIO.IN)
 
@@ -61,8 +63,9 @@ def sense(sensor_number):
         try:
             time.sleep(1)
             semaphore.acquire()
-            print('SENSOR_ID', sensor_number)
             detect_object(sensor_number)
+            print('SENSOR_ID : ', sensor_number,
+                  ' - > ', sensor_data[sensor_number])
         except Exception as e:
             print(e)
         finally:
@@ -88,6 +91,7 @@ try:
     sensor_threads = []
     for i in range(total_sensor):
         sensor_threads.append(threading.Thread(target=sense, args=(i,)))
+        sensor_details.append('sensor_'+str(i))
 
     for sensor in sensor_threads:
         print("Starting sensor thread...", sensor)
@@ -97,9 +101,19 @@ try:
     while control:
         time.sleep(1)
         semaphore.acquire()
+
+        sensor_data_json = {}
+
         for i in range(total_sensor-1):
+            sensor_data_json[sensor_details[i]] = sensor_data[i]
             if sensor_data[i]+sensor_data[i+1] > 1:
                 alert_loc.append(i)
+
+        sensor_data_json[sensor_details[-1]] = sensor_data[-1]
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        data_dump[now] = sensor_data_json
+
         semaphore.release()
         if alert_loc:
             alert(alert_loc)
@@ -111,4 +125,8 @@ finally:
     for sensor in sensor_threads:
         print("Stopping sensor thread...", sensor)
         sensor.join()
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    data_file = open(now+'.json', 'w')
+    data_file.write(json.dumps(data_dump))
+    data_file.close()
     # GPIO.cleanup()
