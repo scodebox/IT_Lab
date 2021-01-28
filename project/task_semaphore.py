@@ -2,11 +2,56 @@
 import threading
 import random
 import time
+# import RPi.GPIO as GPIO
 
 semaphore = threading.Semaphore(1)
 total_sensor = 10
 sensor_data = [0]*total_sensor
 control = True
+
+# GPIO.setwarnings(False)
+# GPIO.cleanup()
+# GPIO.setmode(GPIO.BCM)
+
+pin_details = {0: [1, 2],
+               1: [4, 5],
+               2: [6, 7],
+               3: [1, 2],
+               4: [4, 5],
+               5: [6, 7],
+               6: [1, 2],
+               7: [4, 5],
+               8: [6, 7],
+               9: [1, 2]}
+
+
+def detect_object(id):
+    try:
+        sensor_data[id] = random.choice([0, 1])
+        return
+
+        trigger = pin_details[id][0]
+        echo = pin_details[id][1]
+
+        # GPIO.setup(trigger, GPIO.OUT)
+        # GPIO.setup(echo, GPIO.IN)
+
+        # GPIO.output(trigger, True)
+        # time.sleep(0.00001)
+        # GPIO.output(trigger, False)
+
+        # while GPIO.input(echo) == False:
+        #     start = time.time()
+
+        # while GPIO.input(echo) == True:
+        #     end = time.time()
+
+        # if ((end-start) / 0.000148) < 50:
+        #     sensor_data[id] = 1
+        # else:
+        #     sensor_data[id] = 0
+    except Exception as e:
+        print(e)
 
 
 def sense(sensor_number):
@@ -15,7 +60,7 @@ def sense(sensor_number):
             time.sleep(1)
             semaphore.acquire()
             print('SENSOR_ID', sensor_number)
-            sensor_data[sensor_number] = random.choice([0, 1])
+            detect_object(sensor_number)
         except Exception as e:
             print(e)
         finally:
