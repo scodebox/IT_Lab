@@ -33,6 +33,8 @@ def detect_object(id):
         trigger = pin_details[id][0]
         echo = pin_details[id][1]
 
+        
+
         # GPIO.setup(trigger, GPIO.OUT)
         # GPIO.setup(echo, GPIO.IN)
 
@@ -109,3 +111,4 @@ finally:
     for sensor in sensor_threads:
         print("Stopping sensor thread...", sensor)
         sensor.join()
+    # GPIO.cleanup()
