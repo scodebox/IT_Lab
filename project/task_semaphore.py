@@ -3,65 +3,64 @@ import threading
 import random
 import time
 
-# Using semaphore to allowd one thread at a time.
 semaphore = threading.Semaphore(1)
-# List for sensor data.
-sensor_data = [0]*5
+total_sensor = 10
+sensor_data = [0]*total_sensor
+control = True
 
 
-# Function for sensing object.
-# Argument n is sensor number.
-# After sensing if the object found then n th index of list will be 1 else 0.
-def sense(n):
-    while True:
-        # Sensor will get activated 1 second interval.
-        time.sleep(1)
-        # Down operation on semaphore.
+def sense(sensor_number):
+    while control:
+        try:
+            time.sleep(1)
+            semaphore.acquire()
+            print('SENSOR_ID', sensor_number)
+            sensor_data[sensor_number] = random.choice([0, 1])
+        except Exception as e:
+            print(e)
+        finally:
+            semaphore.release()
+
+
+def alert(locations):
+    try:
+        time.sleep(3)
         semaphore.acquire()
-        # Showing the details of semaphore and the cueent thread.
-        print("locked by : "+threading.current_thread().name)
-        print("Semaphore value : ", semaphore._value)
-        # For testing ramdomly take value from 1 or 0.
-        sensor_data[n] = random.choice([0, 1])
-        print("N : ", n)
-        print("Unlocked by : "+threading.current_thread().name)
-        # Up operation on semaphore.
+
+        while locations:
+            loc = locations.pop()
+            if sensor_data[loc]+sensor_data[loc+1] > 1:
+                print("\t\tALERT :: violation at -> ", loc, (loc+1))
+    except Exception as e:
+        print(e)
+    finally:
         semaphore.release()
-        print("Semaphore value : ", semaphore._value)
-        print()
 
 
-# Function to print the file with 1 second interval.
-# To check that thread synchronization implemented correctly.
-def show_data():
-    while True:
-        # 1 second interval.
+try:
+    sensor_threads = []
+    for i in range(total_sensor):
+        sensor_threads.append(threading.Thread(target=sense, args=(i,)))
+
+    for sensor in sensor_threads:
+        print("Starting sensor thread...", sensor)
+        sensor.start()
+
+    alert_loc = []
+    while control:
         time.sleep(1)
-        # Down operation on semaphore.
         semaphore.acquire()
-        # Showing the details of semaphore and the cueent thread.
-        print("locked by : "+threading.current_thread().name)
-        print("Semaphore value : ", semaphore._value)
-        # Showing the data.
-        print("\tSENSOR DATA :: ", sensor_data)
-        # Up operation on semaphore.
-        print("Unlocked by : "+threading.current_thread().name)
+        for i in range(total_sensor-1):
+            if sensor_data[i]+sensor_data[i+1] > 1:
+                alert_loc.append(i)
         semaphore.release()
-        print("Semaphore value : ", semaphore._value)
-        print()
-
-
-# Creating threads.
-t1 = threading.Thread(target=sense, args=(0,))
-t2 = threading.Thread(target=sense, args=(1,))
-t3 = threading.Thread(target=sense, args=(2,))
-t4 = threading.Thread(target=sense, args=(3,))
-t5 = threading.Thread(target=sense, args=(4,))
-data = threading.Thread(target=show_data)
-# Starting five threads and one thread for showing the list.
-data.start()
-t1.start()
-t2.start()
-t3.start()
-t4.start()
-t5.start()
+        if alert_loc:
+            alert(alert_loc)
+except KeyboardInterrupt as e:
+    print("Stopping.")
+    control = False
+finally:
+    semaphore.release()
+    for sensor in sensor_threads:
+        print("Stopping sensor thread...", sensor)
+        sensor.join()
